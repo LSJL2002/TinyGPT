@@ -81,7 +81,7 @@ Attention allows the model to look at every character in the input block and dec
    - IE (Estimated Numbers)
 
      ```text
-        "B"   "l"   "o"
+            "B"   "l"   "o"
      "B"  [1.2] [0.4] [-2.1]
      "l"  [0.8] [2.5] [0.1]
      "o"  [-0.5] [4.2] [1.8]
@@ -106,7 +106,7 @@ Attention allows the model to look at every character in the input block and dec
    - What it would look like when masked
 
      ```text
-        "B"   "l"   "o"
+            "B"   "l"   "o"
      "B"  [1.2] [-inf] [-inf]
      "l"  [0.8] [2.5] [-inf]
      "o"  [-0.5] [4.2] [1.8]
