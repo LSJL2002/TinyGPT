@@ -129,14 +129,16 @@ Each head can learn a different way of paying attention.
 - Another might learn to remember earlier letters.
 
 ### What it does
-- It creates `num_heads` separate `Head` objects.
-- Each head processes the same input `x` independently.
-- Their outputs are concatenated along the embedding dimension.
-- The combined result is projected back to the original embedding size with a linear layer.
-- Dropout is applied again.
-
-So the model gets multiple attention-based views of the input, then mixes them together.
-
+-  Step 1 Splitting the Workload
+   - First the code will define how the total embedding dimension(embedding dimensions) is divided among the heads.
+   - This is done in order to avoid having one giant attention mechanism looking at everything.
+   - For example if the total size of emb_dim is 256 and there are 4 heads, each head will focus on a smaller feature space (head_size) of 64.
+-  Step 2 Parallel Attention Processing (forward)
+   - When data passes through the network, the code/model will run all of the heads at the exact same time over the input sequence x. When each head calculates its own q,k,v it performs the scaled dot-product attention, and outputs its own focus map.
+-  Step 3 Gluing the results together (torch.cat)
+   -  Once all heads finish calculating, the code will bring in all of their results together through torch.cat.
+- Step 4 Final Projection Layer (self.proj)
+   -  Since multiple heads are glued together it is necessary to format it in a way that it can be passed onto the next step. By using linear projection, the code is able to get the combined matrix of all heads, mixes their insights together mathematically, and maps them back into a clean strcture for the next step.
 ---
 
 ## 6. `FeedForward`
