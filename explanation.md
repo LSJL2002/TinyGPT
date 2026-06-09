@@ -100,7 +100,7 @@ Attention allows the model to look at every character in the input block and dec
      [1 1 1]
      ```
 
-   - The upper half, which is 0, forces the score to become negative infinity(-inf). This is done in order to represents the impossible relationship. 
+   - The upper half, which is 0, forces the score to become negative infinity(-inf). This is done in order to represent impossible relationship. 
    - This is done to enforce the model to constraint itself from cheating by looking in the future, and actually train and learn how to predict instead of looking at the answer.
    - For example, using the same word "Blocks", if the model starts at B, the model blinds the letter "l" and "o", and only has acess to the letter "B". If it predicts "Bl" then it can see the letters "Bl" but not "o"
    - What it would look like when masked
