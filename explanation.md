@@ -79,27 +79,39 @@ Attention allows the model to look at every character in the input block and dec
    - In this step 2 linear layers of q and k are multiplied. (Q x K^t)
    - If the Query and a Key match well, they get a high score if they dont they get a low score.
    - IE (Estimated Numbers)
-         "B"   "l"   "o"
-   "B"  [1.2] [0.4] [-2.1]
-   "l"  [0.8] [2.5] [0.1]
-   "o"  [-0.5][4.2] [1.8]
+
+     ```text
+        "B"   "l"   "o"
+     "B"  [1.2] [0.4] [-2.1]
+     "l"  [0.8] [2.5] [0.1]
+     "o"  [-0.5] [4.2] [1.8]
+     ```
+
    - Scores are claculated based on the dot product. If two vectors point in a similar direction in space, multiplying them will result in a large positive number
    - If they are facing in opposite direction it will yield a negative value
    - If they are unrelated(perpendicular) it yields a value close to zero.
 - Step 3 Casual Masking
    -  wei = wei.masked_fill(self.tril[:T, :T] == 0, float("-inf")). This line of code fetches a lower-triangular matrix.
    - Lower-triangular Matrix
-   [1,0,0]
-   [1,1,0]
-   [1,1,1]
+
+     ```text
+     [1 0 0]
+     [1 1 0]
+     [1 1 1]
+     ```
+
    - The upper half, which is 0, forces the score to become negative infinity(-inf). This is done in order to represents the impossible relationship. 
    - This is done to enforce the model to constraint itself from cheating by looking in the future, and actually train and learn how to predict instead of looking at the answer.
    - For example, using the same word "Blocks", if the model starts at B, the model blinds the letter "l" and "o", and only has acess to the letter "B". If it predicts "Bl" then it can see the letters "Bl" but not "o"
    - What it would look like when masked
-         "B"   "l"   "o"
-   "B"  [1.2] [-inf] [-inf]
-   "l"  [0.8] [2.5] [-inf]
-   "o"  [-0.5][4.2] [1.8]
+
+     ```text
+        "B"   "l"   "o"
+     "B"  [1.2] [-inf] [-inf]
+     "l"  [0.8] [2.5] [-inf]
+     "o"  [-0.5] [4.2] [1.8]
+     ```
+
 - Step 4 Turning scores into percentages
    - The softmax function takes the masked scores and squashes them into a value between 0% ~ 100%. 
    - For the case of "Blo" it will show that the character "o" has a strong connection to the letter "l". 
